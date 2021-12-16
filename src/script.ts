@@ -1,9 +1,9 @@
 import {Wall} from "./wall.js";
 import {Ball} from "./ball.js";
-import {clearCanvas} from "./src/render.js";
-import {HEIGHT, WALL_COLOR, WIDTH} from "./src/constants.js";
+import {clearCanvas} from "./render.js";
+import {HEIGHT, WALL_COLOR, WIDTH} from "./constants.js";
 
-const CANVAS = document.querySelector("#canvas-main");
+const CANVAS: HTMLCanvasElement = document.querySelector("#canvas-main");
 const CTX = CANVAS.getContext("2d");
 
 const NUMBER_OF_PARTICLES = 100;
@@ -39,7 +39,7 @@ const ball = new Ball(
 
 const wall = new Wall(WALL_X, WALL_Y, WALL_WIDTH, WALL_HEIGHT, WALL_COLOR);
 
-ball.init(WIDTH, HEIGHT);
+ball.init();
 
 function main(){
     clearCanvas(CTX);

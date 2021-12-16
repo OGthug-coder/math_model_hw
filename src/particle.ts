@@ -1,6 +1,20 @@
-import {DEFAULT_COLOR, PARTICLE_COLOR, PARTICLE_RADIUS} from "./src/constants.js";
+import {DEFAULT_COLOR, PARTICLE_COLOR, PARTICLE_RADIUS} from "./constants.js";
 
 export class Particle {
+
+    private readonly m: any;
+    x: any;
+    y: any;
+    private v_x: any;
+    private v_y: any;
+    private a_x: number;
+    private a_y: number;
+    left_spring_force_vector: any;
+    right_spring_force_vector: any;
+    left_spring_pressure_force_vector: any;
+    right_spring_pressure_force_vector: any;
+    private readonly reaction_force_vector: any;
+    private total_force_vector: any;
 
     constructor(m, x, y, v0_x, v0_y){
         this.m = m;

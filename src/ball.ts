@@ -1,12 +1,27 @@
 import {Particle} from "./particle.js";
 import {Spring} from "./spring.js";
-import {EPSILON, HEIGHT, SIGMA, WIDTH} from "./src/constants.js";
+import {EPSILON, HEIGHT, SIGMA, WIDTH} from "./constants.js";
 import {Vector} from "./vector.js";
 import {Point} from "./point.js";
 import {Triangle} from "./triangle.js";
-import {Pair} from "./src/pair.js";
+import {Pair} from "./pair.js";
 
 export class Ball {
+
+    private readonly number_of_particles: number;
+    private readonly r: number;
+    private readonly particle_mass: number;
+    private readonly spring_c: number;
+    private readonly k: number;
+    private readonly x: any;
+    private readonly y: any;
+    private readonly v_x: any;
+    private readonly v_y: any;
+    private readonly particles: any[];
+    private readonly springs: any[];
+    private readonly dt: any;
+    private V_0: number;
+    private V: number;
 
     constructor(number_of_particles, r, particle_mass, spring_c, k, x, y, v_x, v_y, dt){
         this.number_of_particles = number_of_particles;
@@ -31,8 +46,8 @@ export class Ball {
             let coordinates = this.#radiansToCoordinates(phi);
             let particle = new Particle(
                 this.particle_mass,
-                coordinates.x + this.x,
-                coordinates.y + this.y,
+                coordinates.GetX() + this.x,
+                coordinates.GetY() + this.y,
                 this.v_x,
                 this.v_y
             );
@@ -74,7 +89,7 @@ export class Ball {
 
     draw(ctx){
         const min_max_pair = this.#findMinMaxForceVectorsLength();
-        const max_vector_length = min_max_pair.second;
+        const max_vector_length = min_max_pair.Second();
 
         for (let i = 0; i < this.springs.length; i++){
             let spring = this.springs[i];

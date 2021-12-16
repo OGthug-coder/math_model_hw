@@ -1,7 +1,12 @@
 import {Edge} from "./edge.js";
+import {DEFAULT_COLOR} from "./constants.js";
 
 export class Triangle
 {
+    private readonly a: any;
+    private readonly b: any;
+    private readonly c: any;
+
     constructor(a, b, c){
         this.a = a;
         this.b = b;

@@ -1,7 +1,10 @@
-import {HEIGHT, WIDTH} from "./src/constants.js";
-import {drawLine} from "./src/render.js";
+import {HEIGHT, WIDTH} from "./constants.js";
+import {drawLine} from "./render.js";
 
 export class Vector {
+
+    private readonly x: any;
+    private readonly y: any;
 
     constructor(x, y){
         this.x = x;

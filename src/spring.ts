@@ -1,17 +1,22 @@
-import {drawLine} from "./src/render.js";
+import {drawLine} from "./render.js";
 import {Vector} from "./vector.js";
-import {SPRING_COLOR} from "./src/constants.js";
+import {SPRING_COLOR} from "./constants.js";
+import {Particle} from "./particle.js";
 
 export class Spring{
 
-    constructor(c, left_particle, right_particle){
+    private readonly c: number;
+    private readonly left_particle: Particle;
+    private readonly right_particle: Particle;
+
+    constructor(c: number, left_particle: Particle, right_particle: Particle){
         this.c = c;
         this.left_particle = left_particle;
         this.right_particle = right_particle;
     }
 
     calculateForce(pressure){
-        let distanceTuple = this.#distanceBetweenParticles();
+        let distanceTuple = this.distanceBetweenParticles();
         let distance_x = distanceTuple[0];
         let distance_y = distanceTuple[1];
         let F_x = this.c * distance_x;
@@ -50,7 +55,7 @@ export class Spring{
         this.right_particle.draw(ctx, max_vector_length);
     }
 
-    #distanceBetweenParticles(){
+    private distanceBetweenParticles(){
         let distance_x = this.left_particle.x - this.right_particle.x;
         let distance_y = this.left_particle.y - this.right_particle.y;
         return [distance_x, distance_y]

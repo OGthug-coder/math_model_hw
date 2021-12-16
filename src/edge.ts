@@ -1,4 +1,8 @@
 export class Edge {
+
+    private readonly a: any;
+    private readonly b: any;
+
     constructor(a, b){
         this.a = a;
         this.b = b;
