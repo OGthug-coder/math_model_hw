@@ -1,4 +1,12 @@
-class Ball {
+import {Particle} from "./particle.js";
+import {Spring} from "./spring.js";
+import {EPSILON, HEIGHT, SIGMA, WIDTH} from "./src/constants.js";
+import {Vector} from "./vector.js";
+import {Point} from "./point.js";
+import {Triangle} from "./triangle.js";
+import {Pair} from "./src/pair.js";
+
+export class Ball {
 
     constructor(number_of_particles, r, particle_mass, spring_c, k, x, y, v_x, v_y, dt){
         this.number_of_particles = number_of_particles;
@@ -17,14 +25,14 @@ class Ball {
         this.V = 0;
     }
 
-    init(width, height){
+    init(){
 
         for (let phi = 0; phi < 2 * Math.PI; phi += 2 * Math.PI / this.number_of_particles){
             let coordinates = this.#radiansToCoordinates(phi);
             let particle = new Particle(
                 this.particle_mass,
-                coordinates[0] + this.x,
-                coordinates[1] + this.y,
+                coordinates.x + this.x,
+                coordinates.y + this.y,
                 this.v_x,
                 this.v_y
             );
@@ -48,24 +56,6 @@ class Ball {
         this.V_0 = this.#calculateVolume(WIDTH, HEIGHT);
     }
 
-    calculateCenterOfMass(ctx){
-
-        let center_mass_x = 0;
-        let center_mass_y = 0;
-        let total_mass = 0;
-
-        for (let i = 0; i < this.number_of_particles; i++){
-            center_mass_x += this.particles[i].x;
-            center_mass_y += this.particles[i].y;
-            total_mass += this.particles[i].m;
-        }
-
-        center_mass_x = center_mass_y / total_mass;
-        center_mass_y = center_mass_y / total_mass;
-
-        return [center_mass_x, center_mass_y];
-    }
-
     recalculatePositions(ctx, width, height, wall){
         this.V = this.#calculateVolume(width, height);
 
@@ -79,61 +69,38 @@ class Ball {
             let particle = this.particles[i];
             particle.reaction_force_vector = this.#calculateReactionForce(particle, wall);
             particle.recalculatePositions(this.dt);
-
-            if (particle.total_force_vector.length() > _max_vector_length){
-                _max_vector_length = particle.total_force_vector.length();
-            }
         }
     }
 
     draw(ctx){
+        const min_max_pair = this.#findMinMaxForceVectorsLength();
+        const max_vector_length = min_max_pair.second;
+
         for (let i = 0; i < this.springs.length; i++){
             let spring = this.springs[i];
-            spring.draw(ctx);
+            spring.draw(ctx, max_vector_length);
         }
     }
 
     #calculateReactionForce(particle, wall){
         let r = wall.distanceToRightEdge(particle);
-        return new Vector(this.#potential(r), 0);
+        return new Vector(Ball.#potential(r), 0);
     }
 
-    #potential(r){
+    static #potential(r){
         let fraction = SIGMA / r;
         return 4 * EPSILON * ((fraction) ** 12 - (fraction) ** 6);
     }
 
     #calculatePressure(){
-        let p = this.k * (this.V_0 / this.V - 1);
-        return p;
-    }
-
-    #twoPointsToVector(point_1, point_2){
-
-        let point_1_x = point_1[0];
-        let point_1_y = point_1[1];
-
-        let point_2_x = point_2[0];
-        let point_2_y = point_2[1];
-
-        let vector_x = point_2_x - point_1_x;
-        let vector_y = point_2_y - point_1_y;
-
-        return [vector_x, vector_y];
+        return this.k * (this.V_0 / this.V - 1);
     }
 
     #radiansToCoordinates(phi){
         let x = this.r * Math.cos(phi);
         let y = this.r * Math.sin(phi);
 
-        return [x, y]
-    }
-
-    #vectorLength(vector){
-        let x = vector[0];
-        let y = vector[1];
-
-        return Math.pow(((x * x + y * y)), 0.5)
+        return new Point(x, y);
     }
 
     #calculateVolume(width, height){
@@ -187,5 +154,25 @@ class Ball {
         }
 
         return result;
+    }
+
+    #findMinMaxForceVectorsLength(){
+        let max = -1;
+        let min = 1e10;
+        this.particles.forEach(x => {
+            if (x.total_force_vector != null){
+                let length = x.total_force_vector.length();
+
+                if (length > max){
+                    max = length;
+                }
+
+                if (length < min){
+                    min = length;
+                }
+            }
+        })
+
+        return new Pair(min, max);
     }
 }

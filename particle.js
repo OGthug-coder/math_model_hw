@@ -1,4 +1,6 @@
-class Particle {
+import {DEFAULT_COLOR, PARTICLE_COLOR, PARTICLE_RADIUS} from "./src/constants.js";
+
+export class Particle {
 
     constructor(m, x, y, v0_x, v0_y){
         this.m = m;
@@ -29,7 +31,7 @@ class Particle {
         this.y += this.v_y * dt;
     }
 
-    draw(ctx){
+    draw(ctx, max_vector_length){
         ctx.fillStyle = PARTICLE_COLOR;
         ctx.beginPath();
         ctx.arc(this.x, this.y, PARTICLE_RADIUS, 0, 2 * Math.PI);
@@ -37,7 +39,7 @@ class Particle {
         ctx.fillStyle = DEFAULT_COLOR;
 
         if (this.total_force_vector != null){
-            this.total_force_vector.draw(ctx, this.x, this.y);
+            this.total_force_vector.draw(ctx, this.x, this.y, max_vector_length);
         }
     }
 

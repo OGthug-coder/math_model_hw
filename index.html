@@ -9,16 +9,64 @@
 </head>
 <body>
     <div class="main">
-        <canvas id="canvas" class="canvas"></canvas>
+        <div>
+            <canvas id="canvas-main" class="canvas-main"></canvas>
+            <div class="input-container">
+                <div class="input-pair">
+                    <div class="custom-input">
+                        <label for="pressure">Pressure (Pa)</label>
+                        <input type="number" name="pressure" id="pressure">
+                    </div>
+                    <div class="custom-input">
+                        <label for="elasticity">Elasticity coefficient (N/m)</label>
+                        <input type="number" name="elasticity" id="elasticity">
+                    </div>
+                </div>
+                <div class="input-pair">
+                    <div class="custom-input">
+                        <label for="number_of_particles">Number of particles</label>
+                        <input type="number" name="number_of_particles" id="number_of_particles">
+                    </div>
+                    <div class="custom-input">
+                        <label for="particle_mass">Particle mass (kg)</label>
+                        <input type="number" name="particle_mass" id="particle_mass">
+                    </div>
+                </div>
+                <div class="input-pair">
+                    <div class="custom-input">
+                        <label for="x_0">X_0 (m)</label>
+                        <input type="number" name="x_0" id="x_0">
+                    </div>
+                    <div class="custom-input">
+                        <label for="y_0">Y_0</label>
+                        <input type="number" name="y_0" id="y_0">
+                    </div>
+                </div>
+                <div class="input-pair">
+                    <div class="custom-input">
+                        <label for="v_x_0">V_X_0 (m / s)</label>
+                        <input type="number" name="v_x_0" id="v_x_0">
+                    </div>
+                    <div class="custom-input">
+                        <label for="v_y_0">V_Y_0 (m / s)</label>
+                        <input type="number" name="v_y_0" id="v_y_0">
+                    </div>
+                </div>
+                <div class="input-pair">
+                    <button id="start">Start</button>
+                    <button id="stop">Stop</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <script src="wall.js"></script>
-    <script src="edge.js"></script>
-    <script src="point.js"></script>
-    <script src="triangle.js"></script>
-    <script src="vector.js"></script>
-    <script src="particle.js"></script>
-    <script src="spring.js"></script>
-    <script src="ball.js"></script>
-    <script src="script.js"></script>
+    <script src="wall.js" type="module"></script>
+    <script src="edge.js" type="module"></script>
+    <script src="point.js" type="module"></script>
+    <script src="triangle.js" type="module"></script>
+    <script src="vector.js" type="module"></script>
+    <script src="particle.js" type="module"></script>
+    <script src="spring.js" type="module"></script>
+    <script src="ball.js" type="module"></script>
+    <script src="script.js" type="module"></script>
 </body>
 </html>

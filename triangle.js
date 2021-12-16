@@ -1,4 +1,6 @@
-class Triangle
+import {Edge} from "./edge.js";
+
+export class Triangle
 {
     constructor(a, b, c){
         this.a = a;
@@ -12,8 +14,7 @@ class Triangle
         let AC = (new Edge(this.a, this.c)).length();
         let perimeter = AB + BC + AC;
         let p = perimeter / 2;
-        let S = Math.pow(p * (p - AB) * (p - BC) * (p - AC), 0.5);
-        return S;
+        return Math.pow(p * (p - AB) * (p - BC) * (p - AC), 0.5);
     }
 
     draw(ctx){

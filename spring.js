@@ -1,4 +1,8 @@
-class Spring{
+import {drawLine} from "./src/render.js";
+import {Vector} from "./vector.js";
+import {SPRING_COLOR} from "./src/constants.js";
+
+export class Spring{
 
     constructor(c, left_particle, right_particle){
         this.c = c;
@@ -31,7 +35,7 @@ class Spring{
         this.right_particle.right_spring_pressure_force_vector = pressure_vector;
     }
 
-    draw(ctx){
+    draw(ctx, max_vector_length){
 
         drawLine(
             ctx,
@@ -42,8 +46,8 @@ class Spring{
             SPRING_COLOR
             );
 
-        this.left_particle.draw(ctx);
-        this.right_particle.draw(ctx);
+        this.left_particle.draw(ctx, max_vector_length);
+        this.right_particle.draw(ctx, max_vector_length);
     }
 
     #distanceBetweenParticles(){

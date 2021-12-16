@@ -1,4 +1,6 @@
-class Wall {
+import {DEFAULT_COLOR} from "./src/constants.js";
+
+export class Wall {
 
     constructor(x, y, width, height, color){
         this.x = x;
