@@ -3,10 +3,10 @@ import {drawLine} from "./render.js";
 
 export class Vector {
 
-    private readonly x: any;
-    private readonly y: any;
+    private readonly x: number;
+    private readonly y: number;
 
-    constructor(x, y){
+    constructor(x: number, y: number){
         this.x = x;
         this.y = y;
     }

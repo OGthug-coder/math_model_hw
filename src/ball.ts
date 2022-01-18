@@ -13,8 +13,8 @@ export class Ball {
     private readonly particle_mass: number;
     private readonly spring_c: number;
     private readonly k: number;
-    private readonly x: any;
-    private readonly y: any;
+    private readonly x: number;
+    private readonly y: number;
     private readonly v_x: any;
     private readonly v_y: any;
     private readonly particles: any[];
@@ -23,7 +23,18 @@ export class Ball {
     private V_0: number;
     private V: number;
 
-    constructor(number_of_particles, r, particle_mass, spring_c, k, x, y, v_x, v_y, dt){
+    constructor(
+            number_of_particles,
+            r,
+            particle_mass,
+            spring_c,
+            k,
+            x: number,
+            y: number,
+            v_x,
+            v_y,
+            dt
+    ){
         this.number_of_particles = number_of_particles;
         this.r = r;
         this.particle_mass = particle_mass;
