@@ -54,7 +54,7 @@ export class Ball {
     init(){
 
         for (let phi = 0; phi < 2 * Math.PI; phi += 2 * Math.PI / this.number_of_particles){
-            let coordinates = this.#radiansToCoordinates(phi);
+            let coordinates = this.radiansToCoordinates(phi);
             let particle = new Particle(
                 this.particle_mass,
                 coordinates.GetX() + this.x,
@@ -79,27 +79,27 @@ export class Ball {
             this.springs.push(last_spring);
         }
 
-        this.V_0 = this.#calculateVolume(WIDTH, HEIGHT);
+        this.V_0 = this.calculateVolume(WIDTH, HEIGHT);
     }
 
     recalculatePositions(ctx, width, height, wall){
-        this.V = this.#calculateVolume(width, height);
+        this.V = this.calculateVolume(width, height);
 
         for (let i = 0; i < this.springs.length; i++){
             let spring = this.springs[i];
-            let pressure = this.#calculatePressure();
+            let pressure = this.calculatePressure();
             spring.calculateForce(pressure);
         }
 
         for (let i = 0; i < this.number_of_particles; i++){
             let particle = this.particles[i];
-            particle.reaction_force_vector = this.#calculateReactionForce(particle, wall);
+            particle.reaction_force_vector = this.calculateReactionForce(particle, wall);
             particle.recalculatePositions(this.dt);
         }
     }
 
     draw(ctx){
-        const min_max_pair = this.#findMinMaxForceVectorsLength();
+        const min_max_pair = this.findMinMaxForceVectorsLength();
         const max_vector_length = min_max_pair.Second();
 
         for (let i = 0; i < this.springs.length; i++){
@@ -108,29 +108,29 @@ export class Ball {
         }
     }
 
-    #calculateReactionForce(particle, wall){
+    calculateReactionForce(particle, wall){
         let r = wall.distanceToRightEdge(particle);
-        return new Vector(Ball.#potential(r), 0);
+        return new Vector(Ball.potential(r), 0);
     }
 
-    static #potential(r){
+    static potential(r){
         let fraction = SIGMA / r;
         return 4 * EPSILON * ((fraction) ** 12 - (fraction) ** 6);
     }
 
-    #calculatePressure(){
+    calculatePressure(){
         return this.k * (this.V_0 / this.V - 1);
     }
 
-    #radiansToCoordinates(phi){
+    private radiansToCoordinates(phi){
         let x = this.r * Math.cos(phi);
         let y = this.r * Math.sin(phi);
 
         return new Point(x, y);
     }
 
-    #calculateVolume(width, height){
-        let center_point = this.#findPointInTheBall(width, height);
+    calculateVolume(width, height){
+        let center_point = this.findPointInTheBall(width, height);
         let V = 0;
 
         for (let i = 0; i < this.springs.length; i++){
@@ -149,24 +149,24 @@ export class Ball {
         return V;
     }
 
-    #randomPoint(width, height){
+    randomPoint(width, height){
         let x = Math.random() * width;
         let y = Math.random() * height;
         return new Point(x, y);
     }
 
-    #findPointInTheBall(width, height){
+    findPointInTheBall(width, height){
         let result = false;
         let point = null;
         while (!result){
-            point = this.#randomPoint(width, height);
-            result = this.#isPointInTheBall(point);
+            point = this.randomPoint(width, height);
+            result = this.isPointInTheBall(point);
         }
 
         return point;
     }
 
-    #isPointInTheBall(point){
+    isPointInTheBall(point){
         let result = false;
         let size = this.number_of_particles;
         let p = this.particles;
@@ -182,7 +182,7 @@ export class Ball {
         return result;
     }
 
-    #findMinMaxForceVectorsLength(){
+    findMinMaxForceVectorsLength(){
         let max = -1;
         let min = 1e10;
         this.particles.forEach(x => {

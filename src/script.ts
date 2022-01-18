@@ -19,16 +19,17 @@ const START_BUTTON: HTMLButtonElement = document.querySelector("#start");
 const PAUSE_BUTTON: HTMLButtonElement = document.querySelector("#pause");
 const STOP_BUTTON: HTMLButtonElement = document.querySelector("#stop");
 
-const NUMBER_OF_PARTICLES = 100;
+let PRESSURE_PARAMETER: number = 1000;
+let SPRING_ELASTICITY: number = 10;
+let NUMBER_OF_PARTICLES: number = 100;
+let PARTICLE_MASS: number = 1;
+let START_X: number = 300;
+let START_Y: number = 300;
+let BALL_VELOCITY_X: number = -10;
+let BALL_VELOCITY_Y: number = 5;
+
 const BALL_RADIUS = 200;
-const PARTICLE_MASS = 1;
-const SPRING_ELASTICITY = 10;
 const DT = Math.pow((PARTICLE_MASS / SPRING_ELASTICITY), 0.5) / (21 * 2 * Math.PI);
-const PRESSURE_PARAMETER = 1000;
-const START_X = 300;
-const START_Y = 300;
-const BALL_VELOCITY_X = -10;
-const BALL_VELOCITY_Y = 5;
 const WALL_X = 30;
 const WALL_Y = 30;
 const WALL_WIDTH = 10;
@@ -37,12 +38,22 @@ const WALL_HEIGHT = WIDTH - WALL_Y * 2;
 CANVAS.width = WIDTH;
 CANVAS.height = HEIGHT;
 
-let ball = null;
+let ball: Ball = null;
 
 const wall = new Wall(WALL_X, WALL_Y, WALL_WIDTH, WALL_HEIGHT, WALL_COLOR);
 
+function parseInputParameters(){
+    PRESSURE_PARAMETER = Number(PRESSURE_INPUT.value);
+    SPRING_ELASTICITY = Number(ELASTICITY_INPUT.value);
+    NUMBER_OF_PARTICLES = Number(NUMBER_OF_PARTICLES_INPUT.value);
+    PARTICLE_MASS = Number(PARTICLE_MASS_INPUT.value);
+    START_X = Number(START_X_INPUT.value);
+    START_Y = Number(START_Y_INPUT.value);
+    BALL_VELOCITY_X = Number(START_V_X_INPUT.value);
+    BALL_VELOCITY_Y = Number(START_V_Y_INPUT.value);
+}
+
 function main(){
-    ball.init();
     clearCanvas(CTX);
     wall.draw(CTX);
     ball.draw(CTX);
@@ -52,8 +63,8 @@ function main(){
 let timerId = null;
 
 START_BUTTON.addEventListener("click", () => {
-    console.log("alo")
     if (timerId == null){
+        parseInputParameters();
         ball = new Ball(
             NUMBER_OF_PARTICLES,
             BALL_RADIUS,
@@ -66,6 +77,9 @@ START_BUTTON.addEventListener("click", () => {
             BALL_VELOCITY_Y,
             DT
         );
+        ball.init();
+        timerId = setInterval(main, 1);
+    } else {
         timerId = setInterval(main, 1);
     }
 });
@@ -73,12 +87,13 @@ START_BUTTON.addEventListener("click", () => {
 PAUSE_BUTTON.addEventListener("click", () => {
    if (timerId != null){
        clearInterval(timerId);
-       timerId = null;
    }
 });
 
 STOP_BUTTON.addEventListener("click", () => {
    if (timerId != null){
        clearInterval(timerId);
+       timerId = null;
+       clearCanvas(CTX);
    }
 });
