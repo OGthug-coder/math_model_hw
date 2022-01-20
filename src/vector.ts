@@ -3,21 +3,21 @@ import {drawLine} from "./render.js";
 
 export class Vector {
 
-    private readonly x: number;
-    private readonly y: number;
+    readonly x: number;
+    readonly y: number;
 
     constructor(x: number, y: number){
         this.x = x;
         this.y = y;
     }
 
-    length(){
+    length() : number {
         let dx = Math.pow(this.x ,2);
         let dy = Math.pow(this.y, 2);
         return Math.pow(dx + dy, 0.5);
     }
 
-    rotateVector(alpha){
+    rotateVector(alpha: number) : Vector {
         let cos = Math.cos(alpha);
         let sin = Math.sin(alpha);
 
@@ -27,17 +27,20 @@ export class Vector {
         return new Vector(x, y);
     }
 
-    multiplyVector(number){
-        let x = this.x * number;
-        let y = this.y * number;
+    multiplyVector(n : number) : Vector {
+        let x = this.x * n;
+        let y = this.y * n;
         return new Vector(x, y);
     }
 
-    addVector(vector){
+    addVector(vector: Vector) : Vector {
         return new Vector(this.x + vector.x, this.y + vector.y);
     }
 
-    draw(ctx, x_0, y_0, max_vector_length){
+    draw(ctx : CanvasRenderingContext2D,
+         x_0 : number,
+         y_0 : number,
+         max_vector_length : number) : void {
         let length = this.length();
         let max_parameter = WIDTH > HEIGHT ? WIDTH : HEIGHT;
         let scale = length / max_parameter * 10;
@@ -59,7 +62,7 @@ export class Vector {
         drawLine(ctx, end_of_vector_x, end_of_vector_y, end_of_vector_x + right_arrow.x, end_of_vector_y + right_arrow.y, color);
     }
 
-    pickColor(max_vector_length){
+    pickColor(max_vector_length: number) : string {
         const length = this.length();
         let percent = length / max_vector_length * 100;
         
@@ -68,7 +71,7 @@ export class Vector {
     }
 
 
-    percentToColor(percent) {
+    percentToColor(percent : number) : string {
         let r, g, b = 0;
         if (percent < 50) {
             r = 255;

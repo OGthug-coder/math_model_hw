@@ -1,7 +1,7 @@
 export class Point {
 
-    private readonly x: any;
-    private readonly y: any;
+    readonly x: any;
+    readonly y: any;
 
     constructor(x, y){
         this.x = x;

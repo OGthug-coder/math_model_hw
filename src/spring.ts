@@ -2,12 +2,13 @@ import {drawLine} from "./render.js";
 import {Vector} from "./vector.js";
 import {SPRING_COLOR} from "./constants.js";
 import {Particle} from "./particle.js";
+import {Pair} from "./pair";
 
 export class Spring{
 
     private readonly c: number;
-    private readonly left_particle: Particle;
-    private readonly right_particle: Particle;
+    readonly left_particle: Particle;
+    readonly right_particle: Particle;
 
     constructor(c: number, left_particle: Particle, right_particle: Particle){
         this.c = c;
@@ -15,10 +16,10 @@ export class Spring{
         this.right_particle = right_particle;
     }
 
-    calculateForce(pressure){
-        let distanceTuple = this.distanceBetweenParticles();
-        let distance_x = distanceTuple[0];
-        let distance_y = distanceTuple[1];
+    calculateForce(pressure : number) : void {
+        let distanceTuple: Pair<number> = this.distanceBetweenParticles();
+        let distance_x = distanceTuple.First();
+        let distance_y = distanceTuple.Second();
         let F_x = this.c * distance_x;
         let F_y = this.c * distance_y;
         
@@ -40,7 +41,7 @@ export class Spring{
         this.right_particle.right_spring_pressure_force_vector = pressure_vector;
     }
 
-    draw(ctx, max_vector_length){
+    draw(ctx : CanvasRenderingContext2D, max_vector_length: number) : void {
 
         drawLine(
             ctx,
@@ -55,9 +56,9 @@ export class Spring{
         this.right_particle.draw(ctx, max_vector_length);
     }
 
-    private distanceBetweenParticles(){
+    private distanceBetweenParticles() : Pair<number> {
         let distance_x = this.left_particle.x - this.right_particle.x;
         let distance_y = this.left_particle.y - this.right_particle.y;
-        return [distance_x, distance_y]
+        return new Pair<number>(distance_x, distance_y);
     }
 }

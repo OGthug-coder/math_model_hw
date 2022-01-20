@@ -1,20 +1,21 @@
 import {DEFAULT_COLOR, PARTICLE_COLOR, PARTICLE_RADIUS} from "./constants.js";
+import {Vector} from "./vector";
 
 export class Particle {
 
-    private readonly m: any;
-    x: any;
-    y: any;
-    private v_x: any;
-    private v_y: any;
+    private readonly m: number;
+    x: number;
+    y: number;
+    private v_x: number;
+    private v_y: number;
     private a_x: number;
     private a_y: number;
-    left_spring_force_vector: any;
-    right_spring_force_vector: any;
-    left_spring_pressure_force_vector: any;
-    right_spring_pressure_force_vector: any;
-    private readonly reaction_force_vector: any;
-    private total_force_vector: any;
+    left_spring_force_vector: Vector;
+    right_spring_force_vector: Vector;
+    left_spring_pressure_force_vector: Vector;
+    right_spring_pressure_force_vector: Vector;
+    reaction_force_vector: Vector;
+    total_force_vector: Vector;
 
     constructor(m, x, y, v0_x, v0_y){
         this.m = m;
@@ -32,8 +33,8 @@ export class Particle {
         this.total_force_vector = null;
     }
 
-    recalculatePositions(dt){
-        this.total_force_vector = this.#totalForceVector();
+    recalculatePositions(dt: number) : void {
+        this.total_force_vector = this.totalForceVector();
 
         this.a_x = this.total_force_vector.x / this.m;
         this.a_y = this.total_force_vector.y / this.m;
@@ -45,7 +46,7 @@ export class Particle {
         this.y += this.v_y * dt;
     }
 
-    draw(ctx, max_vector_length){
+    draw(ctx : CanvasRenderingContext2D, max_vector_length : number){
         ctx.fillStyle = PARTICLE_COLOR;
         ctx.beginPath();
         ctx.arc(this.x, this.y, PARTICLE_RADIUS, 0, 2 * Math.PI);
@@ -57,8 +58,8 @@ export class Particle {
         }
     }
 
-    #totalForceVector(){
-        let tmp = this.left_spring_force_vector.addVector(this.right_spring_force_vector);
+    totalForceVector() : Vector {
+        let tmp : Vector = this.left_spring_force_vector.addVector(this.right_spring_force_vector);
         tmp = tmp.addVector(this.left_spring_pressure_force_vector);
         tmp = tmp.addVector(this.right_spring_pressure_force_vector);
         tmp = tmp.addVector(this.reaction_force_vector);

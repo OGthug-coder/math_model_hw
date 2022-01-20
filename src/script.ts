@@ -28,21 +28,21 @@ let START_Y: number = 300;
 let BALL_VELOCITY_X: number = -10;
 let BALL_VELOCITY_Y: number = 5;
 
-const BALL_RADIUS = 200;
-const DT = Math.pow((PARTICLE_MASS / SPRING_ELASTICITY), 0.5) / (21 * 2 * Math.PI);
-const WALL_X = 30;
-const WALL_Y = 30;
-const WALL_WIDTH = 10;
-const WALL_HEIGHT = WIDTH - WALL_Y * 2;
+const BALL_RADIUS: number = 200;
+const DT: number = Math.pow((PARTICLE_MASS / SPRING_ELASTICITY), 0.5) / (21 * 2 * Math.PI);
+const WALL_X: number = 30;
+const WALL_Y: number = 30;
+const WALL_WIDTH: number = 10;
+const WALL_HEIGHT: number = WIDTH - WALL_Y * 2;
 
 CANVAS.width = WIDTH;
 CANVAS.height = HEIGHT;
 
 let ball: Ball = null;
 
-const wall = new Wall(WALL_X, WALL_Y, WALL_WIDTH, WALL_HEIGHT, WALL_COLOR);
+const wall: Wall = new Wall(WALL_X, WALL_Y, WALL_WIDTH, WALL_HEIGHT, WALL_COLOR);
 
-function parseInputParameters(){
+function parseInputParameters() : void {
     PRESSURE_PARAMETER = Number(PRESSURE_INPUT.value);
     SPRING_ELASTICITY = Number(ELASTICITY_INPUT.value);
     NUMBER_OF_PARTICLES = Number(NUMBER_OF_PARTICLES_INPUT.value);
@@ -53,7 +53,7 @@ function parseInputParameters(){
     BALL_VELOCITY_Y = Number(START_V_Y_INPUT.value);
 }
 
-function main(){
+function main() : void {
     clearCanvas(CTX);
     wall.draw(CTX);
     ball.draw(CTX);

@@ -1,18 +1,18 @@
-export class Pair {
+export class Pair<T> {
 
-    private readonly first: any;
-    private readonly second: any;
+    private readonly first: T;
+    private readonly second: T;
 
-    constructor(first, second) {
+    constructor(first: T, second: T) {
         this.first = first;
         this.second = second;
     }
 
-    public First(){
+    public First() : T {
         return this.first;
     }
 
-    public Second(){
+    public Second() : T {
         return this.second;
     }
 }

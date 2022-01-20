@@ -1,36 +1,24 @@
 import {Edge} from "./edge.js";
-import {DEFAULT_COLOR} from "./constants.js";
+import {Point} from "./point";
 
 export class Triangle
 {
-    private readonly a: any;
-    private readonly b: any;
-    private readonly c: any;
+    private readonly a: Point;
+    private readonly b: Point;
+    private readonly c: Point;
 
-    constructor(a, b, c){
+    constructor(a: Point, b: Point, c: Point){
         this.a = a;
         this.b = b;
         this.c = c;
     }
 
-    calculateVolume(){
+    calculateVolume() : number {
         let AB = (new Edge(this.a, this.b)).length();
         let BC = (new Edge(this.b, this.c)).length();
         let AC = (new Edge(this.a, this.c)).length();
         let perimeter = AB + BC + AC;
         let p = perimeter / 2;
         return Math.pow(p * (p - AB) * (p - BC) * (p - AC), 0.5);
-    }
-
-    draw(ctx){
-        let randomColor = `#${Math.floor(Math.random()*16777215).toString(16)}`;
-        ctx.fillStyle = randomColor;
-        ctx.beginPath();
-        ctx.moveTo(this.a.x, this.a.y);
-        ctx.lineTo(this.b.x, this.b.y);
-        ctx.lineTo(this.c.x, this.c.y);
-        ctx.fill();
-
-        ctx.fillStyle = DEFAULT_COLOR;
     }
 }

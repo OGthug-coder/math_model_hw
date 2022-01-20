@@ -5,6 +5,7 @@ import {Vector} from "./vector.js";
 import {Point} from "./point.js";
 import {Triangle} from "./triangle.js";
 import {Pair} from "./pair.js";
+import {Wall} from "./wall";
 
 export class Ball {
 
@@ -15,25 +16,25 @@ export class Ball {
     private readonly k: number;
     private readonly x: number;
     private readonly y: number;
-    private readonly v_x: any;
-    private readonly v_y: any;
-    private readonly particles: any[];
-    private readonly springs: any[];
-    private readonly dt: any;
+    private readonly v_x: number;
+    private readonly v_y: number;
+    private readonly particles: Particle[];
+    private readonly springs: Spring[];
+    private readonly dt: number;
     private V_0: number;
     private V: number;
 
     constructor(
-            number_of_particles,
-            r,
-            particle_mass,
-            spring_c,
-            k,
+            number_of_particles: number,
+            r: number,
+            particle_mass: number,
+            spring_c: number,
+            k: number,
             x: number,
             y: number,
-            v_x,
-            v_y,
-            dt
+            v_x: number,
+            v_y: number,
+            dt: number
     ){
         this.number_of_particles = number_of_particles;
         this.r = r;
@@ -51,9 +52,9 @@ export class Ball {
         this.V = 0;
     }
 
-    init(){
+    init() : void {
 
-        for (let phi = 0; phi < 2 * Math.PI; phi += 2 * Math.PI / this.number_of_particles){
+        for (let phi: number = 0; phi < 2 * Math.PI; phi += 2 * Math.PI / this.number_of_particles){
             let coordinates = this.radiansToCoordinates(phi);
             let particle = new Particle(
                 this.particle_mass,
@@ -82,7 +83,11 @@ export class Ball {
         this.V_0 = this.calculateVolume(WIDTH, HEIGHT);
     }
 
-    recalculatePositions(ctx, width, height, wall){
+    recalculatePositions(ctx: CanvasRenderingContext2D,
+                         width: number,
+                         height: number,
+                         wall: Wall) : void {
+
         this.V = this.calculateVolume(width, height);
 
         for (let i = 0; i < this.springs.length; i++){
@@ -98,9 +103,9 @@ export class Ball {
         }
     }
 
-    draw(ctx){
-        const min_max_pair = this.findMinMaxForceVectorsLength();
-        const max_vector_length = min_max_pair.Second();
+    draw(ctx : CanvasRenderingContext2D) : void {
+        const min_max_pair : Pair<number> = this.findMinMaxForceVectorsLength();
+        const max_vector_length : number = min_max_pair.Second();
 
         for (let i = 0; i < this.springs.length; i++){
             let spring = this.springs[i];
@@ -108,54 +113,54 @@ export class Ball {
         }
     }
 
-    calculateReactionForce(particle, wall){
+    calculateReactionForce(particle: Particle, wall: Wall) : Vector {
         let r = wall.distanceToRightEdge(particle);
         return new Vector(Ball.potential(r), 0);
     }
 
-    static potential(r){
+    static potential(r: number) : number {
         let fraction = SIGMA / r;
         return 4 * EPSILON * ((fraction) ** 12 - (fraction) ** 6);
     }
 
-    calculatePressure(){
+    calculatePressure() : number {
         return this.k * (this.V_0 / this.V - 1);
     }
 
-    private radiansToCoordinates(phi){
+    private radiansToCoordinates(phi : number) : Point {
         let x = this.r * Math.cos(phi);
         let y = this.r * Math.sin(phi);
 
         return new Point(x, y);
     }
 
-    calculateVolume(width, height){
-        let center_point = this.findPointInTheBall(width, height);
+    calculateVolume(width: number, height: number) : number {
+        let center_point : Point = this.findPointInTheBall(width, height);
         let V = 0;
 
         for (let i = 0; i < this.springs.length; i++){
-            let spring = this.springs[i];
+            let spring : Spring = this.springs[i];
 
-            let left = spring.left_particle;
-            let left_point = new Point(left.x, left.y);
+            let left : Particle = spring.left_particle;
+            let left_point : Point = new Point(left.x, left.y);
 
-            let right = spring.right_particle;
-            let right_point = new Point(right.x, right.y);
+            let right : Particle = spring.right_particle;
+            let right_point : Point = new Point(right.x, right.y);
 
-            let triangle = new Triangle(center_point, left_point, right_point);
+            let triangle : Triangle = new Triangle(center_point, left_point, right_point);
             V += triangle.calculateVolume();
         }
         
         return V;
     }
 
-    randomPoint(width, height){
+    randomPoint(width, height) : Point {
         let x = Math.random() * width;
         let y = Math.random() * height;
         return new Point(x, y);
     }
 
-    findPointInTheBall(width, height){
+    findPointInTheBall(width: number, height: number) : Point {
         let result = false;
         let point = null;
         while (!result){
@@ -166,7 +171,7 @@ export class Ball {
         return point;
     }
 
-    isPointInTheBall(point){
+    isPointInTheBall(point: Point) : boolean{
         let result = false;
         let size = this.number_of_particles;
         let p = this.particles;
@@ -182,7 +187,7 @@ export class Ball {
         return result;
     }
 
-    findMinMaxForceVectorsLength(){
+    findMinMaxForceVectorsLength() : Pair<number> {
         let max = -1;
         let min = 1e10;
         this.particles.forEach(x => {
@@ -199,6 +204,6 @@ export class Ball {
             }
         })
 
-        return new Pair(min, max);
+        return new Pair<number>(min, max);
     }
 }
